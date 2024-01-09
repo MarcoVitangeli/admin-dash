@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS product_category;
+
+CREATE TABLE product_category (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

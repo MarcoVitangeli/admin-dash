@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link href="/static/css/home.css" rel="stylesheet">
+</head>
+<body>
+    <script defer src="/static/js/htmx.js"></script>
+    <header>
+        <h1>Admin Dashboard</h1>
+        <nav id="admin-nav">
+            <a hx-get="/create-category" hx-target="#content" hx-swap="outerHTML">create category</a>
+            <a>create product</a>
+            <a>All products categories</a>
+            <a>All products</a>
+        </nav>
+    </header>
+    <div id="content"></div>
+</body>
+</html>

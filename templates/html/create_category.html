@@ -1,0 +1,35 @@
+<style>
+    #category-title > h3 {
+        font-weight: normal;
+        text-align: center;
+        margin-top: 2rem;
+    }
+    #create-category-form {
+        margin-inline: auto;
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    #create-category-form button {
+        margin-top: 1rem;
+        width: 5rem;
+        height: 2rem;
+    }
+    #create-category-form label {
+        margin-right: .5rem;
+    }
+</style>
+<div id="content">
+    <div id="category-title">
+       <h3>Create a category to add products to</h3>
+    </div>
+    <form id="create-category-form" hx-trigger="submit" hx-post="/create-category">
+        <p>
+            <label for="name">name:</label>
+            <input type="text" name="name" id="name">
+        </p>
+        <button type="submit">Create</button>
+    </form>
+</div>

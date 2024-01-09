@@ -1,0 +1,25 @@
+header {
+    margin-inline: auto;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+#admin-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#admin-nav > a {
+    cursor: default;
+    user-select: none;
+}
+
+#admin-nav > a:hover {
+    color: blue;
+}
+
+#admin-nav > a:active {
+    color: blue;
+    text-decoration: underline;
+}
