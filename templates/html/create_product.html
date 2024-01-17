@@ -1,0 +1,56 @@
+<style>
+    #product-input-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #create-product-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #create-product-form button {
+        margin-top: 20px;
+    }
+    #product-title > h3 {
+        font-weight: normal;
+        text-align: center;
+        margin-top: 2rem;
+    }
+    #product-input-container span:not(:first-of-type) {
+        margin-top: 30px;
+    }
+    #product-input-container span label {
+        margin-right: 15px;
+    }
+</style>
+<div id="content">
+    <div id="product-title">
+        <h3>Create a category to add products to</h3>
+    </div>
+    <form
+            hx-on="htmx:responseError: handleError('content')"
+            id="create-product-form"
+            hx-trigger="submit"
+            hx-post="/create-product"
+            hx-target="#content"
+            hx-swap="afterbegin">
+        <div id="product-input-container">
+            <span>
+                <label for="product-name">name:</label>
+                <input type="text" name="product-name" id="product-name">
+            </span>
+
+            <span>
+                <label for="product-description">description:</label>
+                <input type="text" name="product-description" id="product-description">
+            </span>
+
+            <span>
+                <label for="product-category">category:</label>
+                <input type="number" name="product-category" id="product-category">
+            </span>
+        </div>
+        <button type="submit">Create</button>
+    </form>
+</div>

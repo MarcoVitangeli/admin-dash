@@ -10,6 +10,7 @@ import (
 
 type ProductRepository interface {
 	CreateCategory(ctx context.Context, name string) (int64, error)
+	CreateProduct(ctx context.Context, name string, description string, categoryId int) (int64, error)
 }
 
 type productDB struct {
@@ -18,7 +19,9 @@ type productDB struct {
 
 var (
 	instance              ProductRepository
-	ErrDuplicatedCategory = errors.New("Error: category is alreacy present")
+	ErrDuplicatedCategory = errors.New("category is already present")
+	ErrDuplicatedProduct  = errors.New("product is already present")
+	ErrCategoryNotFound   = errors.New("category not found: id nonexistent")
 )
 
 func GetRepository() (ProductRepository, error) {
@@ -57,4 +60,39 @@ func (pdb *productDB) CreateCategory(ctx context.Context, name string) (int64, e
 		}
 		return id, nil
 	}
+}
+
+func (pdb *productDB) CreateProduct(ctx context.Context, name string, description string, categoryId int) (int64, error) {
+	var (
+		aux     int
+		auxName string
+	)
+	if err := pdb.QueryRowContext(ctx, "SELECT 1 FROM product_category WHERE id = ?", categoryId).Scan(&aux); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return -1, ErrCategoryNotFound
+		}
+		return -1, fmt.Errorf("database error: %w", err)
+	}
+
+	if err := pdb.QueryRowContext(ctx, "SELECT 1 FROM products WHERE name = ?", name).Scan(&auxName); err == nil {
+		return -1, ErrDuplicatedProduct
+	} else if !errors.Is(err, sql.ErrNoRows) {
+		return -1, fmt.Errorf("unexpected error in db: %w", err)
+	}
+
+	res, err := pdb.ExecContext(ctx, "INSERT INTO products(name, description, category_id) VALUES (?,?,?)",
+		name,
+		description,
+		categoryId)
+
+	if err != nil {
+		return -1, fmt.Errorf("unexpected failure creating product: %w", err)
+	}
+
+	newId, err := res.LastInsertId()
+	if err != nil {
+		return -1, fmt.Errorf("unexpected failure getting the created product ID: %w", err)
+	}
+
+	return newId, nil
 }
