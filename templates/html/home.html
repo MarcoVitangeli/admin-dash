@@ -7,6 +7,14 @@
 </head>
 <body>
     <script defer src="/static/js/htmx.js"></script>
+    <script>
+        /// utils
+        function handleError(id) {
+            if (event?.detail?.failed) {
+                document.getElementById(id)?.insertAdjacentHTML("afterbegin", event.detail.xhr.response);
+            }
+        }
+    </script>
     <header>
         <h1>Admin Dashboard</h1>
         <nav id="admin-nav">

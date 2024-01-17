@@ -1,6 +1,6 @@
 <style>
-    .error {
-        background-color: red;
+    .success {
+        background-color: greenyellow;
         border-radius: 10px;
         margin-top: 1rem;
     }
@@ -20,13 +20,13 @@
         user-select: none;
     }
 
-    .error > p {
+    .success > p {
         text-align: center;
         font-size: 1rem;
         white-space: initial;
     }
 </style>
-<div class="error">
+<div class="success">
     <span class="close" onclick="this.parentElement.remove()">&times</span>
-    <p>Error encountered: {{.Message}}</p>
+    <p>{{.Message}}</p>
 </div>

@@ -36,10 +36,11 @@ func GetRepository() (ProductRepository, error) {
 }
 
 func (pdb *productDB) CreateCategory(ctx context.Context, name string) (int64, error) {
-	var err error
-	res := pdb.QueryRowContext(ctx, "SELECT 1 FROM product_category WHERE name = ?")
-
-	if err = res.Err(); err == nil {
+	var (
+		err error
+		aux int
+	)
+	if err = pdb.QueryRowContext(ctx, "SELECT 1 FROM product_category WHERE name = ?", name).Scan(&aux); err == nil {
 		return -1, ErrDuplicatedCategory
 	}
 
