@@ -21,21 +21,19 @@
         margin-right: .5rem;
     }
 </style>
-<div id="content">
-    <div id="category-title">
-       <h3>Create a category to add products to</h3>
-    </div>
-    <form
-            hx-on="htmx:responseError: handleError('content')"
-            id="create-category-form"
-            hx-trigger="submit"
-            hx-post="/create-category"
-            hx-target="#content"
-            hx-swap="afterbegin">
-        <p>
-            <label for="name">name:</label>
-            <input type="text" name="name" id="name">
-        </p>
-        <button type="submit">Create</button>
-    </form>
+<div id="category-title">
+   <h3>Create a category to add products to</h3>
 </div>
+<form
+        hx-on="htmx:responseError: handleError('content')"
+        id="create-category-form"
+        hx-trigger="submit"
+        hx-post="/create-category"
+        hx-target="#content"
+        hx-swap="afterbegin">
+    <p>
+        <label for="name">name:</label>
+        <input type="text" name="name" id="name">
+    </p>
+    <button type="submit">Create</button>
+</form>
