@@ -10,7 +10,25 @@ import (
 )
 
 func GetCreateProduct(ctx *gin.Context) {
-	ctx.HTML(http.StatusOK, "create_product.html", nil)
+	pdb, err := database.GetRepository()
+	if err != nil {
+		ctx.HTML(http.StatusInternalServerError, "error.html", map[string]any{
+			"Message": err.Error(),
+		})
+		return
+	}
+
+	categories, err := pdb.GetCategories(ctx)
+	if err != nil {
+		ctx.HTML(http.StatusInternalServerError, "error.html", map[string]any{
+			"Message": err.Error(),
+		})
+		return
+	}
+
+	ctx.HTML(http.StatusOK, "create_product.html", map[string]any{
+		"Categories": categories,
+	})
 }
 
 func PostCreateProduct(ctx *gin.Context) {

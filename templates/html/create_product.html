@@ -47,7 +47,11 @@
 
         <span>
             <label for="product-category">category:</label>
-            <input type="number" name="product-category" id="product-category">
+            <select name="product-category" id="product-category">
+                {{range .Categories}}
+                    <option value="{{.Id}}">{{.Name}}</option>
+                {{end}}
+            </select>
         </span>
     </div>
     <button type="submit">Create</button>
