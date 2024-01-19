@@ -1,0 +1,41 @@
+<style>
+#category-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#category-list li {
+    display: grid;
+    grid-auto-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+    border: 5px solid black;
+    border-bottom: none;
+}
+#category-list li:last-child {
+    border-bottom: 5px solid black;
+}
+#category-list li span {
+    text-align: center;
+}
+#category-list li span:not(:last-child) {
+    border-right: 5px solid black;
+}
+#category-list-title {
+    font-weight: bold;
+}
+</style>
+<ul id="category-list">
+    <li id="category-list-title">
+        <span>ID</span>
+        <span>Name</span>
+        <span>Created at</span>
+    </li>
+    {{range .Categories}}
+    <li>
+        <span>{{.Id}}</span>
+        <span>{{.Name}}</span>
+        <span>{{.CreatedAt}}</span>
+    </li>
+    {{end}}
+</ul>

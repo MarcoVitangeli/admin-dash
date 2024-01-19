@@ -5,12 +5,15 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/MarcoVitangeli/admin-dash/models"
 	_ "github.com/mattn/go-sqlite3"
+	"time"
 )
 
 type ProductRepository interface {
 	CreateCategory(ctx context.Context, name string) (int64, error)
 	CreateProduct(ctx context.Context, name string, description string, categoryId int) (int64, error)
+	GetCategories(ctx context.Context, count uint) ([]models.ProductCategory, error)
 }
 
 type productDB struct {
@@ -95,4 +98,31 @@ func (pdb *productDB) CreateProduct(ctx context.Context, name string, descriptio
 	}
 
 	return newId, nil
+}
+
+func (pdb *productDB) GetCategories(ctx context.Context, count uint) ([]models.ProductCategory, error) {
+	rows, err := pdb.QueryContext(ctx, "SELECT id, name, created_at FROM product_category LIMIT ?", count)
+	if err != nil {
+		return nil, fmt.Errorf("error reading categories: %w", err)
+	}
+
+    categories := make([]models.ProductCategory, 0, count)
+
+	for rows.Next() {
+		var (
+			id       uint64 
+			name      string
+			createdAt time.Time
+		)
+        if err := rows.Scan(&id, &name, &createdAt); err != nil {
+            return nil, fmt.Errorf("error reading row: %w", err)
+        }
+        categories = append(categories, models.ProductCategory{
+            Id: id,
+            Name: name,
+            CreatedAt: createdAt,
+        })
+	}
+
+    return categories[:len(categories):len(categories)], nil
 }
