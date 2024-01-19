@@ -36,7 +36,6 @@ func main() {
 	r.POST("/create-product", controller.PostCreateProduct)
 
 	r.GET("/categories", controller.GetListCategories)
-
 	r.GET("/categories/search", controller.SearchCategories)
 
 	log.Panic(r.Run(":8080"))

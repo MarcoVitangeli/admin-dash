@@ -13,8 +13,8 @@ import (
 type ProductRepository interface {
 	CreateCategory(ctx context.Context, name string) (int64, error)
 	CreateProduct(ctx context.Context, name string, description string, categoryId int) (int64, error)
-	GetCategories(ctx context.Context, count uint) ([]models.ProductCategory, error)
-	SearchCategories(ctx context.Context, nameStub string, count uint) ([]models.ProductCategory, error)
+	GetCategories(ctx context.Context) ([]models.ProductCategory, error)
+	SearchCategories(ctx context.Context, nameStub string) ([]models.ProductCategory, error)
 }
 
 type productDB struct {
@@ -101,13 +101,15 @@ func (pdb *productDB) CreateProduct(ctx context.Context, name string, descriptio
 	return newId, nil
 }
 
-func (pdb *productDB) GetCategories(ctx context.Context, count uint) ([]models.ProductCategory, error) {
-	rows, err := pdb.QueryContext(ctx, "SELECT id, name, created_at FROM product_category LIMIT ?", count)
+func (pdb *productDB) GetCategories(ctx context.Context) ([]models.ProductCategory, error) {
+	var (
+		categories []models.ProductCategory
+	)
+
+	rows, err := pdb.QueryContext(ctx, "SELECT id, name, created_at FROM product_category")
 	if err != nil {
 		return nil, fmt.Errorf("error reading categories: %w", err)
 	}
-
-	categories := make([]models.ProductCategory, 0, count)
 
 	for rows.Next() {
 		var (
@@ -128,18 +130,19 @@ func (pdb *productDB) GetCategories(ctx context.Context, count uint) ([]models.P
 	return categories[:len(categories):len(categories)], nil
 }
 
-func (pdb *productDB) SearchCategories(ctx context.Context, nameStub string, count uint) ([]models.ProductCategory, error) {
+func (pdb *productDB) SearchCategories(ctx context.Context, nameStub string) ([]models.ProductCategory, error) {
+	var (
+		categories []models.ProductCategory
+	)
+
 	rows, err := pdb.QueryContext(ctx, `
 SELECT id, name, created_at 
 FROM product_category 
-WHERE name LIKE '%' || ? || '%'
-LIMIT ?`, nameStub, count)
+WHERE name LIKE '%' || ? || '%'`, nameStub)
 
 	if err != nil {
 		return nil, fmt.Errorf("error reading categories: %w", err)
 	}
-
-	categories := make([]models.ProductCategory, 0, count)
 
 	for rows.Next() {
 		var (

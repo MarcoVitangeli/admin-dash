@@ -18,7 +18,7 @@ func GetListCategories(ctx *gin.Context) {
 		return
 	}
 
-	categories, err := pdb.GetCategories(ctx, 20)
+	categories, err := pdb.GetCategories(ctx)
 	if err != nil {
 		ctx.HTML(http.StatusInternalServerError, "error.html", map[string]any{
 			"Message": err.Error(),
@@ -32,11 +32,10 @@ func GetListCategories(ctx *gin.Context) {
 }
 
 func SearchCategories(ctx *gin.Context) {
-	time.Sleep(time.Second * 2)
+	time.Sleep(time.Second * 2) //delay to show loading spinner
 	var (
 		categories []models.ProductCategory
 		err        error
-		queryLimit uint = 20
 	)
 	pdb, err := database.GetRepository()
 	if err != nil {
@@ -47,10 +46,10 @@ func SearchCategories(ctx *gin.Context) {
 	}
 
 	if sq := ctx.Query("search"); sq == "" {
-		categories, err = pdb.GetCategories(ctx, queryLimit)
+		categories, err = pdb.GetCategories(ctx)
 	} else {
 		fmt.Printf("SEARCH: %s\n", sq)
-		categories, err = pdb.SearchCategories(ctx, sq, queryLimit)
+		categories, err = pdb.SearchCategories(ctx, sq)
 	}
 
 	if err != nil {
