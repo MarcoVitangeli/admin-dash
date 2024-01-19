@@ -1,0 +1,12 @@
+<li id="category-list-title">
+    <span>ID</span>
+    <span>Name</span>
+    <span>Created at</span>
+</li>
+{{range .Categories}}
+<li>
+    <span>{{.Id}}</span>
+    <span>{{.Name}}</span>
+    <span>{{.CreatedAt}}</span>
+</li>
+{{end}}

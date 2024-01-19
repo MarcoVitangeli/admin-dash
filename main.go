@@ -14,6 +14,7 @@ func main() {
 		"./templates/html/success.html",
 		"./templates/html/all_categories.html",
 		"./templates/html/create_product.html",
+		"./templates/html/search_category.html",
 		"./templates/html/create_category.html")
 
 	r.Static("/static", "./static")
@@ -26,7 +27,9 @@ func main() {
 	r.GET("/create-product", controller.GetCreateProduct)
 	r.POST("/create-product", controller.PostCreateProduct)
 
-    r.GET("/products", controller.GetListCategories)
+	r.GET("/categories", controller.GetListCategories)
+
+	r.GET("/categories/search", controller.SearchCategories)
 
 	log.Panic(r.Run(":8080"))
 }

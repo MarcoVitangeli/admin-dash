@@ -24,7 +24,43 @@
 #category-list-title {
     font-weight: bold;
 }
+#category-search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 25px;
+}
+#search-input {
+    width: 50%;
+    text-align: center;
+}
+
+.htmx-indicator{
+    opacity:0;
+    transition: opacity 500ms ease-in;
+    text-align: center;
+}
+.htmx-request .htmx-indicator{
+    opacity:1
+}
+.htmx-request.htmx-indicator{
+    opacity:1
+}
 </style>
+<div id="category-search-container">
+    <input
+            id="search-input"
+            type="search"
+            name="search"
+            placeholder="Search for category names"
+            hx-get="/categories/search"
+            hx-target="#category-list"
+            hx-trigger="input changed delay:500ms, search"
+            hx-swap="innerHTML"
+            hx-indicator=".htmx-indicator"
+    >
+    <img src="/static/assets/spinner.svg" alt="loading..." height="30" width="30" class="htmx-indicator">
+</div>
 <ul id="category-list">
     <li id="category-list-title">
         <span>ID</span>

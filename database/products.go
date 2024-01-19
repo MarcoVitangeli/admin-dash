@@ -14,6 +14,7 @@ type ProductRepository interface {
 	CreateCategory(ctx context.Context, name string) (int64, error)
 	CreateProduct(ctx context.Context, name string, description string, categoryId int) (int64, error)
 	GetCategories(ctx context.Context, count uint) ([]models.ProductCategory, error)
+	SearchCategories(ctx context.Context, nameStub string, count uint) ([]models.ProductCategory, error)
 }
 
 type productDB struct {
@@ -106,23 +107,55 @@ func (pdb *productDB) GetCategories(ctx context.Context, count uint) ([]models.P
 		return nil, fmt.Errorf("error reading categories: %w", err)
 	}
 
-    categories := make([]models.ProductCategory, 0, count)
+	categories := make([]models.ProductCategory, 0, count)
 
 	for rows.Next() {
 		var (
-			id       uint64 
+			id        uint64
 			name      string
 			createdAt time.Time
 		)
-        if err := rows.Scan(&id, &name, &createdAt); err != nil {
-            return nil, fmt.Errorf("error reading row: %w", err)
-        }
-        categories = append(categories, models.ProductCategory{
-            Id: id,
-            Name: name,
-            CreatedAt: createdAt,
-        })
+		if err := rows.Scan(&id, &name, &createdAt); err != nil {
+			return nil, fmt.Errorf("error reading row: %w", err)
+		}
+		categories = append(categories, models.ProductCategory{
+			Id:        id,
+			Name:      name,
+			CreatedAt: createdAt,
+		})
 	}
 
-    return categories[:len(categories):len(categories)], nil
+	return categories[:len(categories):len(categories)], nil
+}
+
+func (pdb *productDB) SearchCategories(ctx context.Context, nameStub string, count uint) ([]models.ProductCategory, error) {
+	rows, err := pdb.QueryContext(ctx, `
+SELECT id, name, created_at 
+FROM product_category 
+WHERE name LIKE '%' || ? || '%'
+LIMIT ?`, nameStub, count)
+
+	if err != nil {
+		return nil, fmt.Errorf("error reading categories: %w", err)
+	}
+
+	categories := make([]models.ProductCategory, 0, count)
+
+	for rows.Next() {
+		var (
+			id        uint64
+			name      string
+			createdAt time.Time
+		)
+		if err := rows.Scan(&id, &name, &createdAt); err != nil {
+			return nil, fmt.Errorf("error reading row: %w", err)
+		}
+		categories = append(categories, models.ProductCategory{
+			Id:        id,
+			Name:      name,
+			CreatedAt: createdAt,
+		})
+	}
+
+	return categories[:len(categories):len(categories)], nil
 }
