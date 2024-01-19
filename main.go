@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/MarcoVitangeli/admin-dash/controller"
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 func main() {
@@ -24,5 +25,5 @@ func main() {
 	r.GET("/create-product", controller.GetCreateProduct)
 	r.POST("/create-product", controller.PostCreateProduct)
 
-	r.Run(":8080")
+	log.Panic(r.Run(":8080"))
 }
