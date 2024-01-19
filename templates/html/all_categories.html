@@ -62,6 +62,7 @@
     <img src="/static/assets/spinner.svg" alt="loading..." height="30" width="30" class="htmx-indicator">
 </div>
 <ul id="category-list">
+
     <li id="category-list-title">
         <span>ID</span>
         <span>Name</span>
@@ -71,7 +72,7 @@
     <li>
         <span>{{.Id}}</span>
         <span>{{.Name}}</span>
-        <span>{{.CreatedAt}}</span>
+        <span>{{.CreatedAt | FormatDate}}</span>
     </li>
     {{end}}
 </ul>

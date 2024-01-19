@@ -3,11 +3,19 @@ package main
 import (
 	"github.com/MarcoVitangeli/admin-dash/controller"
 	"github.com/gin-gonic/gin"
+	"html/template"
 	"log"
+	"time"
 )
 
 func main() {
 	r := gin.Default()
+
+	r.SetFuncMap(template.FuncMap{
+		"FormatDate": func(t time.Time) string {
+			return t.Format("2006-01-02 15:04:05")
+		},
+	})
 	r.LoadHTMLFiles(
 		"./templates/html/home.html",
 		"./templates/html/error.html",
